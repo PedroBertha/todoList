@@ -29,7 +29,7 @@ export default function AddTarefa() {
             <button onClick={addClick}>Adicionar tarefa</button>
             {tarefas.map((tarefas, id) => (
                 <div key={id}>
-                    <input
+                    <input className='checkbox-input'
                         type="checkbox"
                         checked={tarefas.done}
                         onChange={() => toggleDone(id)}
