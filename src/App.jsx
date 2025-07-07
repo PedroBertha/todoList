@@ -15,7 +15,7 @@ ALTERAÇÕES A SEREM FEITAS:
 6.  APLICAR HOOK useCallback (feito)
 */
 
-import { useState, useEffect, createContext, useMemo, useReducer, useCallback } from 'react'
+import { useState, useEffect, createContext, useMemo, useCallback } from 'react'
 import './App.css'
 
 export const ThemeContext = createContext(null)
