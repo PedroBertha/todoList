@@ -7,7 +7,7 @@ ALTERAÇÕES A SEREM FEITAS:
     E INFORMAR A PRIORIDADE DA TAREFA (ALTA, MÉDIA OU BAIXA).
 
 3.  AO DELETAR UMA TAREFA, O USARIO DEVE CONFIRMAR A AÇÃO
-    COM UM ALERTA DE CONFIRMAÇÃO. (feito)
+    COM UM ALERTA DE CONFIRMAÇÃO.
 
 4.  AJUSTAR DARK MODE.
 5.  AJUSTAR CHECKBOX.
@@ -30,21 +30,17 @@ export default function AddTarefa() {
         localStorage.setItem('tarefas', JSON.stringify(tarefas))
     }, [tarefas])
 
-
+    
     const addClick = useCallback(() => {
         setTarefas(tarefas => [...tarefas, { done: false }]);
     }, [])
 
     const deleteClick = useCallback((id) => {
-        const tarefa = tarefas[id]
-        const texto = tarefa && tarefa.text ? tarefa.text : 'esta tarefa';
-        if (window.confirm(`Tem certeza que deseja deletar "${texto}"?`)) {
-            setTarefas(tarefas => tarefas.filter((_terefas, i) => i !== id))
-        }
-    }, [tarefas]) // [] -> significa que está usando a função funcional do
-    // setTarefas, Qque sempre pega o valor mais recente.
+        setTarefas(tarefas => tarefas.filter((_terefas, i) => i !== id))
+    }, []) // [] -> significa que está usando a função funcional do
+           // setTarefas, Qque sempre pega o valor mais recente.
 
-    const toggleDone = useCallback((id) => {
+    const toggleDone =useCallback((id) => {
         setTarefas(prev =>
             prev.map((t, i) => i === id ? { ...t, done: !t.done } : t)
         )
@@ -60,7 +56,7 @@ export default function AddTarefa() {
     const [theme, setTheme] = useState('light')
 
     // Efeito colateral para aplicar a classe 'dark' ao body quando o tema for 'dark'
-    useEffect(() => {
+    useEffect (() => {
         document.body.className = theme === 'dark' ? 'dark' : ''
     }, [theme])
 
@@ -78,11 +74,11 @@ export default function AddTarefa() {
             <div className='app-container'>
                 <label>
                     <input
-                        type="checkbox"
-                        checked={theme === 'dark'}
-                        onChange={(e) => {
-                            setTheme(e.target.checked ? 'dark' : 'light')
-                        }}
+                    type="checkbox"
+                    checked={theme === 'dark'}
+                    onChange={(e) => {
+                        setTheme(e.target.checked ? 'dark' : 'light')
+                    }}
                     />
                     Usar Modo Escuro
                 </label>

@@ -4,6 +4,10 @@
   text-align: center;
 }
 
+body {
+  margin: auto;
+}
+
 body.dark {
   background-color: black;
   color: #fff;
