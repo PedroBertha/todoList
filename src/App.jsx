@@ -1,4 +1,21 @@
-import { useState, useEffect, createContext, useMemo } from 'react'
+/*
+ALTERAÇÕES A SEREM FEITAS:
+1.  APLICAR HOOK useReducer
+
+2.  AO QUILICAR NO BOTÃO "ADCIONAR TAREFA", ABRIR UM MODAL
+    PEDIDNO PARA O USUÁRIO DIGITAR O TEXTO DA TAREFA
+    E INFORMAR A PRIORIDADE DA TAREFA (ALTA, MÉDIA OU BAIXA).
+
+3.  AO DELETAR UMA TAREFA, O USARIO DEVE CONFIRMAR A AÇÃO
+    COM UM ALERTA DE CONFIRMAÇÃO. (feito)
+
+4.  AJUSTAR DARK MODE.
+5.  AJUSTAR CHECKBOX.
+
+6.  APLICAR HOOK useCallback (feito)
+*/
+
+import { useState, useEffect, createContext, useMemo, useReducer, useCallback } from 'react'
 import './App.css'
 
 export const ThemeContext = createContext(null)
@@ -13,31 +30,37 @@ export default function AddTarefa() {
         localStorage.setItem('tarefas', JSON.stringify(tarefas))
     }, [tarefas])
 
-    const addClick = () => {
-        setTarefas([...tarefas, { done: false }]);
-    };
 
-    const deleteClick = id => {
-        setTarefas(tarefas => tarefas.filter((_terefas, i) => i !== id))
-    }
+    const addClick = useCallback(() => {
+        setTarefas(tarefas => [...tarefas, { done: false }]);
+    }, [])
 
-    const toggleDone = id => {
+    const deleteClick = useCallback((id) => {
+        const tarefa = tarefas[id]
+        const texto = tarefa && tarefa.text ? tarefa.text : 'esta tarefa';
+        if (window.confirm(`Tem certeza que deseja deletar "${texto}"?`)) {
+            setTarefas(tarefas => tarefas.filter((_terefas, i) => i !== id))
+        }
+    }, [tarefas]) // [] -> significa que está usando a função funcional do
+    // setTarefas, Qque sempre pega o valor mais recente.
+
+    const toggleDone = useCallback((id) => {
         setTarefas(prev =>
             prev.map((t, i) => i === id ? { ...t, done: !t.done } : t)
         )
-    }
+    }, [])
 
-    const updateText = (id, text) => {
+    const updateText = useCallback((id, text) => {
         setTarefas(prev =>
             prev.map((t, i) => i === id ? { ...t, text } : t)
         )
-    }
+    }, [])
 
     // Define o tema inicial como 'light'
     const [theme, setTheme] = useState('light')
 
     // Efeito colateral para aplicar a classe 'dark' ao body quando o tema for 'dark'
-    useEffect (() => {
+    useEffect(() => {
         document.body.className = theme === 'dark' ? 'dark' : ''
     }, [theme])
 
@@ -55,11 +78,11 @@ export default function AddTarefa() {
             <div className='app-container'>
                 <label>
                     <input
-                    type="checkbox"
-                    checked={theme === 'dark'}
-                    onChange={(e) => {
-                        setTheme(e.target.checked ? 'dark' : 'light')
-                    }}
+                        type="checkbox"
+                        checked={theme === 'dark'}
+                        onChange={(e) => {
+                            setTheme(e.target.checked ? 'dark' : 'light')
+                        }}
                     />
                     Usar Modo Escuro
                 </label>
